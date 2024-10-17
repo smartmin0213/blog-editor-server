@@ -122,7 +122,7 @@ export const getPreview = asyncHandler(async (req: Request, res: Response) => {
     return;
   }
 
-  res.status(200).send(blog.description);
+  res.status(200).send(JSON.parse(blog.description).html);
 });
 
 export const updateBlog = asyncHandler(async (req: Request, res: Response) => {
@@ -172,6 +172,7 @@ export const updateBlog = asyncHandler(async (req: Request, res: Response) => {
   res.status(200).json({
     success: true,
     blog: updatedBlog,
+    message: "Blog Updated Successfully",
   });
 });
 
