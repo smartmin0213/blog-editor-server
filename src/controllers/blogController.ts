@@ -1,9 +1,9 @@
 import asyncHandler from "express-async-handler";
 import { Request, Response } from "express";
-import Todo from "../models/todoModel";
+import Blog from "../models/blogModel";
 import User from "../models/userModel";
 
-export const addTodo = asyncHandler(async (req: Request, res: Response) => {
+export const addBlog = asyncHandler(async (req: Request, res: Response) => {
   const userId = req?.user?.id;
 
   const user = await User.findById(userId);
@@ -30,25 +30,25 @@ export const addTodo = asyncHandler(async (req: Request, res: Response) => {
     return;
   }
 
-  const todo = await Todo.create({
+  const blog = await Blog.create({
     title,
     description,
     isCompleted,
     userId: user?._id,
   });
 
-  user.todos.push(todo._id);
+  user.blogs.push(blog._id);
 
   await user.save();
 
   res.status(201).json({
     success: true,
-    message: "Todo Added Successfully",
-    todo,
+    message: "Blog Added Successfully",
+    blog,
   });
 });
 
-export const getTodos = asyncHandler(async (req: Request, res: Response) => {
+export const getBlogs = asyncHandler(async (req: Request, res: Response) => {
   const userId = req?.user?.id;
 
   const user = await User.findById(userId);
@@ -60,15 +60,15 @@ export const getTodos = asyncHandler(async (req: Request, res: Response) => {
     });
     return;
   }
-  const todos = await Todo.find({ userId: user?._id }).sort({ createdAt: -1 });
+  const blogs = await Blog.find({ userId: user?._id }).sort({ createdAt: -1 });
 
   res.status(200).json({
     success: true,
-    todos,
+    blogs,
   });
 });
 
-export const getTodo = asyncHandler(async (req: Request, res: Response) => {
+export const getBlog = asyncHandler(async (req: Request, res: Response) => {
   const userId = req?.user?.id;
 
   const user = await User.findById(userId);
@@ -82,19 +82,19 @@ export const getTodo = asyncHandler(async (req: Request, res: Response) => {
 
   const { id } = req.params;
 
-  const todo = await Todo.findOne({ _id: id, userId: user?._id });
+  const blog = await Blog.findOne({ _id: id, userId: user?._id });
 
-  if (!todo) {
+  if (!blog) {
     res.status(400).json({
       success: false,
-      message: "Todo Not Found",
+      message: "Blog Not Found",
     });
     return;
   }
 
   res.status(200).json({
     success: true,
-    todo,
+    blog,
   });
 });
 
@@ -112,20 +112,20 @@ export const getPreview = asyncHandler(async (req: Request, res: Response) => {
 
   const { id } = req.params;
 
-  const todo = await Todo.findOne({ _id: id, userId: user?._id });
+  const blog = await Blog.findOne({ _id: id, userId: user?._id });
 
-  if (!todo) {
+  if (!blog) {
     res.status(400).json({
       success: false,
-      message: "Todo Not Found",
+      message: "Blog Not Found",
     });
     return;
   }
 
-  res.status(200).send(todo.description);
+  res.status(200).send(blog.description);
 });
 
-export const updateTodo = asyncHandler(async (req: Request, res: Response) => {
+export const updateBlog = asyncHandler(async (req: Request, res: Response) => {
   const userId = req?.user?.id;
 
   const user = await User.findById(userId);
@@ -145,37 +145,37 @@ export const updateTodo = asyncHandler(async (req: Request, res: Response) => {
     isCompleted?: boolean;
   };
 
-  const todo = await Todo.findOne({ _id: id, userId: user?._id });
+  const blog = await Blog.findOne({ _id: id, userId: user?._id });
 
-  if (!todo) {
+  if (!blog) {
     res.status(400).json({
       success: false,
-      message: "Todo Not Found",
+      message: "Blog Not Found",
     });
     return;
   }
 
   if (title !== undefined) {
-    todo.title = title;
+    blog.title = title;
   }
 
   if (description !== undefined) {
-    todo.description = description;
+    blog.description = description;
   }
 
   if (isCompleted !== undefined) {
-    todo.isCompleted = isCompleted;
+    blog.isCompleted = isCompleted;
   }
 
-  const updatedTodo = await todo.save();
+  const updatedBlog = await blog.save();
 
   res.status(200).json({
     success: true,
-    todo: updatedTodo,
+    blog: updatedBlog,
   });
 });
 
-export const deleteTodo = asyncHandler(async (req: Request, res: Response) => {
+export const deleteBlog = asyncHandler(async (req: Request, res: Response) => {
   const userId = req?.user?.id;
 
   const user = await User.findById(userId);
@@ -190,30 +190,30 @@ export const deleteTodo = asyncHandler(async (req: Request, res: Response) => {
 
   const { id } = req.params;
 
-  const todo = await Todo.findOne({ _id: id, userId: user?._id });
+  const blog = await Blog.findOne({ _id: id, userId: user?._id });
 
-  if (!todo) {
+  if (!blog) {
     res.status(401).json({
       success: false,
-      message: "Todo Not Found",
+      message: "Blog Not Found",
     });
     return;
   }
 
-  user.todos = user.todos.filter((todoId) => todoId.toString() !== id);
+  user.blogs = user.blogs.filter((blogId) => blogId.toString() !== id);
 
   await user.save();
 
-  await todo.deleteOne({ _id: id });
+  await blog.deleteOne({ _id: id });
 
   res.status(200).json({
     success: true,
-    message: "Todo Deleted Successfully",
-    todo,
+    message: "Blog Deleted Successfully",
+    blog,
   });
 });
 
-export const toggleTodoComplete = asyncHandler(async (req: Request, res: Response) => {
+export const toggleBlogComplete = asyncHandler(async (req: Request, res: Response) => {
   const userId = req?.user?.id;
 
   const user = await User.findById(userId);
@@ -228,23 +228,23 @@ export const toggleTodoComplete = asyncHandler(async (req: Request, res: Respons
 
   const { id } = req.params;
 
-  const todo = await Todo.findOne({ _id: id, userId: user?._id });
+  const blog = await Blog.findOne({ _id: id, userId: user?._id });
 
-  if (!todo) {
+  if (!blog) {
     res.status(401).json({
       success: false,
-      message: "Todo Not Found",
+      message: "Blog Not Found",
     });
     return;
   }
 
   // Toggle the isCompleted field
-  todo.isCompleted = !todo.isCompleted;
+  blog.isCompleted = !blog.isCompleted;
 
-  const updatedTodo = await todo.save();
+  const updatedBlog = await blog.save();
 
   res.status(200).json({
     success: true,
-    todo: updatedTodo,
+    blog: updatedBlog,
   });
 });

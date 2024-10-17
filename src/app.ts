@@ -3,7 +3,7 @@ import dbConnect from "./config/dbConnect";
 import { config } from "dotenv";
 import notFound from "./middleware/notFound";
 import userRouter from "./routes/userRoute";
-import todoRouter from "./routes/todoRoute";
+import blogRouter from "./routes/blogRoute";
 import cors from "cors";
 import morgan from "morgan";
 
@@ -29,7 +29,7 @@ dbConnect();
 
 app.use("/api/v1/users", userRouter);
 
-app.use("/api/v1/todos", todoRouter);
+app.use("/api/v1/blogs", blogRouter);
 
 app.use(notFound);
 

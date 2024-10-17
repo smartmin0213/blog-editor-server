@@ -1,13 +1,13 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-export interface TodoSchemaInterface extends Document {
+export interface BlogSchemaInterface extends Document {
   title: string;
   description: string;
   isCompleted: boolean;
   userId: mongoose.Schema.Types.ObjectId;
 }
 
-const todoSchema = new Schema<TodoSchemaInterface>(
+const blogSchema = new Schema<BlogSchemaInterface>(
   {
     title: {
       type: String,
@@ -37,6 +37,6 @@ const todoSchema = new Schema<TodoSchemaInterface>(
   }
 );
 
-const Todo = mongoose.model<TodoSchemaInterface>("Todo", todoSchema);
+const Blog = mongoose.model<BlogSchemaInterface>("Blog", blogSchema);
 
-export default Todo;
+export default Blog;

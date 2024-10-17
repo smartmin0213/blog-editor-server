@@ -5,7 +5,7 @@ import jwt, {
   JwtPayload
 } from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
-import Todo from "../models/todoModel";
+import Blog from "../models/blogModel";
 
 declare module "express" {
   interface Request {
@@ -31,12 +31,12 @@ const protect = async (req: Request, res: Response, next: NextFunction) => {
     const decoded = await jwt.verify(accessToken, jwtSecret) as JwtPayload;
     
     if (req.params.id) {
-      const todo = await Todo.findOne({ _id: req.params.id, userId: decoded.id });
+      const blog = await Blog.findOne({ _id: req.params.id, userId: decoded.id });
 
-      if (!todo) {
+      if (!blog) {
         return res.status(403).json({
           success: false,
-          message: "You do not have permission to access this todo.",
+          message: "You do not have permission to access this blog.",
         });
       }
     }

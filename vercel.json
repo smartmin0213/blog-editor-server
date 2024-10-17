@@ -12,8 +12,8 @@
       "dest": "/src/routes/userRoute.ts"
     },
     {
-      "src": "/api/v1/todos",
-      "dest": "/src/routes/todoRoute.ts"
+      "src": "/api/v1/blogs",
+      "dest": "/src/routes/blogRoute.ts"
     },
     {
       "src": "/(.*)",

@@ -1,13 +1,13 @@
 import mongoose, { Schema, Document } from "mongoose";
 import bcrypt from "bcryptjs";
-import { TodoSchemaInterface } from "./todoModel";
+import { BlogSchemaInterface } from "./blogModel";
 
 export interface UserSchemaInterface extends Document {
   name: string;
   email: string;
   password: string;
   matchPassword(candidatePassword: string): Promise<boolean>;
-  todos: Array<TodoSchemaInterface>;
+  blogs: Array<BlogSchemaInterface>;
 }
 
 const userSchema = new Schema<UserSchemaInterface>(
@@ -25,10 +25,10 @@ const userSchema = new Schema<UserSchemaInterface>(
       type: String,
       required: true,
     },
-    todos: [
+    blogs: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Todo",
+        ref: "Blog",
       },
     ],
   },
